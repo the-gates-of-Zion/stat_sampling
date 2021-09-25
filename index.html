@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+<!--    <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=no" /> -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!--    this is testing -->
+     <link rel="stylesheet" href="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/css/jquery-ui.css">
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!--    <script src="js/jquery-1.10.1.min.js"></script>-->
+    <title>Sampling Distributions</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/css/SamplingApp.css" media="screen" />
+    <!--Extra-->
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/css/Extra.css" media="screen" /> 
+<!---->
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/css/Histogram.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/css/Tips.css" media="screen" />
+<!--https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/AnimatedHistogram.js-->
+    <script src="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/Stats.js"></script>
+    <script src="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/HistogramData.js"></script>
+    <script src="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/Histogram.js"></script>
+    <script src="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/AnimatedHistogram.js"></script>
+    <script src="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/Sampling.js"></script>
+    <script src="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/SamplingApp.js"></script>
+    <script src="https://cdn.rawgit.com/the-gates-of-Zion/stat_sim/master/js/StatisticsFunctions.js"></script>
+</head>
+<body class="masterclass">
+<!-- This leftmost column displays the stats -->
+<div class="column" id="displayStatsColumn">
+    <div id="statsDisplay1">
+        <div class="blue row">
+            mean=<div class="blue right" id="mean1">24</div>
+        </div>
+
+        <div class="magenta row">
+            median=<div class="magenta right" id="median1">48</div>
+        </div>
+ 
+       <div class="red row">
+            sd=<div class="red right" id="sd1">48</div><br/>
+        </div>
+
+        <div class="row">
+            skew=<div class="right" id="skew1">48</div><br/>
+        </div>
+
+	<div class="row">
+            kurtosis=<div class="right" id="kurtosis1">48</div><br/>
+        </div>
+
+    </div>
+    <!-- Stats Display for Histogram 2 -->
+    <div id="statsDisplay2">
+        <div class="row">
+            Number of Samples=<div class="right" id="reps2">0</div>
+        </div>
+<!--        <div class="green row">
+            range=<div class="green right" id="range2">0</div>
+        </div>
+-->
+    </div>   
+</div>
+<!-- The middle column contains interactive charts -->
+<div class="column" id="graphs">
+    <div id="histogram1" class="histogram"></div> <!-- Parent Population -->
+    <div id="histogram2" class="histogram mytooltip" mytitle="The distribution of the sample data will be shown in this graph."></div> <!-- Sample Data -->
+    <div id="displayData1" class="displayData mytooltip" mytitle="The values of the sample data will be displayed inside the box. Pressing the “Show Statistics” button will display the statistics of these sample data.">
+	Sample values:<br/>
+	<form>
+	    <textarea rows="6" cols="50" readonly id="sampleValuesTextarea" style="resize: none;"></textarea>
+	</form>
+    </div>
+    <div id="displayStat1" class="displayStat">
+	<br/>
+        <table style="width:100%">
+		<col width="25%"/>
+		<col width="25%"/>
+		<col width="25%"/>
+		<col width="25%"/>
+	    <tr>
+	        <td align="right"> Mean:</td>
+		<td> <span class="sampleStat" id="sampleMean"></span> </td>
+		<td align="right"> Median: </td>
+		<td> <span class="sampleStat" id="sampleMedian"></span></td>
+	    </tr>
+	   <tr>
+	        <td align="right"> Variance(Unbiased):</td>
+		<td> <span class="sampleStat" id="sampleVariance"></span></td>
+		<td align="right"> SD: </td>
+		<td> <span class="sampleStat" id="sampleSD"></span></td>
+	    </tr>
+	    <tr>
+	        <td align="right"> Range: </td>
+		<td> <span class="sampleStat" id="sampleRange"></span></td>
+		<td> </td>
+		<td> </td>
+	    </tr>
+        </table>
+    </div>
+</div>
+<!-- The rightmost column, the menu -->
+<div class="column" id="menu">
+    <p style="width:140px;" class= "mytooltip" mytitle="
+You can choose the type of population distribution by clicking the drop down menu. You can also drag an irregular distribution after choosing Poisson or Binomial distribution.
+Select the mean and the standard deviation by checking the respective button. The statistics of the population will be shown on the left hand side.
+    ">
+        Distribution: <br/>
+        <select name="distribution">
+            <option>Normal</option>
+            <option>Binomial</option>
+            <option>Poisson</option>
+<!--            <option>Uniform</option>
+
+                <option>Skewed</option>
+            
+            <option>Custom</option>
+-->
+	</select>
+        <br/>
+        Distribution Parameters: <br/>
+	<input name="distPara" type="radio" value='1'><span id="distPara1"></span><br/>
+	<input name="distPara" type="radio" value='2'><span id="distPara2"></span><br/>
+	<input name="distPara" type="radio" value='3'><span id="distPara3"></span><br/>
+    </p>
+<!-- Menu for second histogram -->
+    <br/>
+    <br/>
+    <p style="position:absolute;top:150px;width:140px;" class="mytooltip" mytitle="You can draw samples from population by clicking '+1', '+5' or '+10' in order to draw 1, 5 or 10 samples each time. You can also clear the samples by clicking the 'Clear Samples' button.">
+        Generate Samples:<br/>
+        
+        <button class="button2" id="sample1">+1</button><br/>
+        <button class="button2" id="sample5">+5</button><br/>
+        <button class="button2" id="sample10">+10</button><br/>
+	<button id="resetSamples">Clear Samples</button></br>
+
+    </p>
+<!-- Menu for third histogram -->
+    <br/>
+    <p style="position:absolute;top:300px">
+
+    </p>
+<!-- Menu for fourth histogram -->
+    <p style="position:absolute;top:430px;">
+        <button id="showStat">Show Statistics</button><br/>
+        <button id="hideStat">Hide Statistics</button><br/>
+	<br\>
+	<input type="checkbox" id="showtips" checked> Show tips<br>
+
+    </p>
+
+</div>
+
+<img src="image/normdistgraph.png" class="graph" id="normdistgraph">
+
+</body>
+</html>
